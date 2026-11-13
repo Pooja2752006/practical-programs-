@@ -1,3 +1,4 @@
+<pre>
 ##------PRA NO-1
 <pre><code>
 class SmartHomeAgent:
@@ -50,6 +51,7 @@ agent.display()
 
 ##------PRA NO - 2 ---------------------------------------------------------------------------------------------------------------------------------------
 <pre><code>
+    <h1>
 from collections import deque
 import time
 
@@ -79,7 +81,7 @@ def mazesol(maze_grid,start,end):
         for nr,nc in direction:
             nr=r+nr
             nc=c+nc
-            if 0<=nr<rows and 0<=nc<cols:
+           if 0<=nr<rows and 0<=nc<cols:
                 if maze_grid[nr][nc] == 0: 
                     if (nr,nc) not in visited:
                         visited.add((nr,nc))
@@ -100,6 +102,7 @@ if __name__ == "__main__":
         print(shortest_path)
     else:
         print("No solution exists for this maze.")
+    </h1>
 </code></pre>
 
 
@@ -527,4 +530,5 @@ plt.title("Confusion Matrix - Logistic Regression")
 plt.show()
 
 </code></pre>
+</pre>
           
