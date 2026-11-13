@@ -1,4 +1,5 @@
 ##------PRA NO-1
+<pre><code>
 class SmartHomeAgent:
     
     def __init__(self):
@@ -44,10 +45,11 @@ owner = input("Owner at Home? (yes/no): ") #//.lower() == "yes"
 agent.perceive(light, temp, motion, owner)
 agent.display()
 
-
+</code></pre>
 
 
 ##------PRA NO - 2 ---------------------------------------------------------------------------------------------------------------------------------------
+<pre><code>
 from collections import deque
 import time
 
@@ -98,11 +100,11 @@ if __name__ == "__main__":
         print(shortest_path)
     else:
         print("No solution exists for this maze.")
-
+</code></pre>
 
 
 ##------PRA NO- 3-------------------------------------------------------------------------------------------------------------------------------------------
-
+<pre><code>
 
 graph = {
 
@@ -169,10 +171,10 @@ path, cost = astar(graph, start, goal, heuristic)
 print("Shortest Path:", path)
 print("Total Cost:", cost)
 
-
+</code></pre>
 ##-----PRA NO - 4 ----------------------------------------------------------------------------------------------------------------------------------
 
-
+<pre><code>
 rules = [
     (["fever", "cough", "body_ache"], "flu_like_illness"),
     (["sneezing", "cough"], "common_cold"),
@@ -330,9 +332,9 @@ else:
     except ValueError:
         print("Invalid input. Please enter a number from 1 to 5.")
           
-
+</code></pre>
 PRA no -5 -----------------------------------------------------------------------------------------------------------
-
+<pre><code>
 First, import the Pandas library.
 import pandas as pd
 The read_csv() function is used to read a CSV file.
@@ -352,10 +354,11 @@ df.info()
 Reading CSV from a Specific Location
 If the CSV file is stored in another folder, specify its path.
 df = pd.read_csv("C:/Users/Student/Documents/heart.csv")
-
+    
+</code></pre>
 
 PRA - 7------------------------------------------------------------------------------------------------------------------------------------------
-
+<pre><code>
   import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -523,5 +526,5 @@ display_labels=["Disease","No Disease"],
 plt.title("Confusion Matrix - Logistic Regression")
 plt.show()
 
-
+</code></pre>
           
