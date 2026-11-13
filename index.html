@@ -47,11 +47,11 @@ agent.perceive(light, temp, motion, owner)
 agent.display()
 
 
-
+</code></pre>
 
 ##------PRA NO - 2 ---------------------------------------------------------------------------------------------------------------------------------------
 
-    
+ <pre><code>   
 from collections import deque
 import time
 
@@ -81,7 +81,7 @@ def mazesol(maze_grid,start,end):
         for nr,nc in direction:
             nr=r+nr
             nc=c+nc
-           if 0<=nr<rows and 0<=nc<cols:
+           if 0<=nr <p><rows and 0<=nc<cols:
                 if maze_grid[nr][nc] == 0: 
                     if (nr,nc) not in visited:
                         visited.add((nr,nc))
@@ -101,13 +101,13 @@ if __name__ == "__main__":
         print(f"Shortest path found ({len(shortest_path) - 1} steps):")
         print(shortest_path)
     else:
-        print("No solution exists for this maze.")
-    
+        print("No solution exists for this maze.")</p>
+   </code></pre> 
 
 
 ##------PRA NO- 3-------------------------------------------------------------------------------------------------------------------------------------------
 
-
+<pre><code>
 graph = {
 
 'A': [('B', 1), ('C', 4)],
@@ -173,10 +173,10 @@ path, cost = astar(graph, start, goal, heuristic)
 print("Shortest Path:", path)
 print("Total Cost:", cost)
 
-
+</code></pre>
 ##-----PRA NO - 4 ----------------------------------------------------------------------------------------------------------------------------------
 
-
+<pre><code>
 rules = [
     (["fever", "cough", "body_ache"], "flu_like_illness"),
     (["sneezing", "cough"], "common_cold"),
@@ -333,9 +333,9 @@ else:
 
     except ValueError:
         print("Invalid input. Please enter a number from 1 to 5.")
-          
+  </code></pre>        
 PRA no -5 -----------------------------------------------------------------------------------------------------------
-
+<pre><code>
 First, import the Pandas library.
 import pandas as pd
 The read_csv() function is used to read a CSV file.
