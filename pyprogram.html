@@ -1,0 +1,527 @@
+##------PRA NO-1
+class SmartHomeAgent:
+    
+    def __init__(self):
+        self.light = False
+        self.fan = False
+        self.alarm = False
+
+    def perceive(self, light_level, temperature, motion, owner_home):
+
+        # Light Control
+        if light_level < 40:
+            self.light = True
+        else:
+            self.light = False
+
+        # Fan Control
+        if temperature > 30:
+            self.fan = True
+        else:
+            self.fan = False
+
+        # Security
+        if motion and not owner_home:
+            self.alarm = True
+        else:
+            self.alarm = False
+
+    def display(self):
+        print("\n------ Smart Home Status ------")
+        print("Lights :", "ON" if self.light else "OFF")
+        print("Fan    :", "ON" if self.fan else "OFF")
+        print("Alarm  :", "ON" if self.alarm else "OFF")
+
+
+# Driver Program
+
+agent = SmartHomeAgent()
+
+light = int(input("Enter Light Level (0-100): "))
+temp = float(input("Enter Temperature: "))
+motion = input("Motion Detected? (yes/no): ") #.lower() == "yes"
+owner = input("Owner at Home? (yes/no): ") #//.lower() == "yes"
+agent.perceive(light, temp, motion, owner)
+agent.display()
+
+
+
+
+##------PRA NO - 2 ---------------------------------------------------------------------------------------------------------------------------------------
+from collections import deque
+import time
+
+maze_grid=[
+    [0,1,0,0,1],
+    [0,0,1,1,1],
+    [0,0,1,1,1],
+    [0,0,0,0,0],
+    [0,0,0,0,0]
+    ]
+def mazesol(maze_grid,start,end):
+    
+    
+    rows=len(maze_grid)
+    cols=len(maze_grid[0])
+    start=(0,0)
+    end=(4,4)
+    visited={start}
+    direction=[(-1,0),(1,0),(0,-1),(0,1)]
+    queue=deque([(start,[start])])
+    explored=0
+    while queue:
+        (r,c),path=queue.popleft()
+        explored=explored+1
+        if (r,c) == end:
+            return path,explored
+        for nr,nc in direction:
+            nr=r+nr
+            nc=c+nc
+            if 0<=nr<rows and 0<=nc<cols:
+                if maze_grid[nr][nc] == 0: 
+                    if (nr,nc) not in visited:
+                        visited.add((nr,nc))
+                        queue.append(((nr,nc),path+[(nr,nc)]))
+    return None,explored
+
+if __name__ == "__main__":
+    start=(0,0)
+    end=(4,4)
+    start_time = time.perf_counter()
+    shortest_path, nodes = mazesol(maze_grid, start, end)
+    end_time = time.perf_counter()
+    execution_time = end_time - start_time
+    print("Execution Time:", execution_time, "seconds")
+    if shortest_path:
+        print("No. of nodes explored",nodes)
+        print(f"Shortest path found ({len(shortest_path) - 1} steps):")
+        print(shortest_path)
+    else:
+        print("No solution exists for this maze.")
+
+
+
+##------PRA NO- 3-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+graph = {
+
+'A': [('B', 1), ('C', 4)],
+'B': [('D', 2), ('E', 5)],
+'C': [('F', 3)],
+'D': [('G', 3)],
+'E': [('G', 2)],
+'F': [('G', 2)],
+'G': []
+}
+
+# Heuristic values h(n)
+heuristic = {
+'A': 7,
+'B': 6,
+'C': 4,
+'D': 3,
+'E': 2,
+'F': 2,
+'G': 0
+}
+
+start = 'A'
+goal = 'G'
+
+import heapq
+
+def astar(graph, start, goal, heuristic):
+    open_list = []
+    gscore = {start: 0}
+    parent = {start: None}
+
+    fscore = gscore[start] + heuristic[start]
+    heapq.heappush(open_list, (fscore, start))
+
+    while open_list:
+        current_f, current = heapq.heappop(open_list)
+
+        if current == goal:
+            path = []
+            while current is not None:
+                path.append(current)
+                current = parent[current]
+
+            path.reverse()
+            return path, gscore[goal]
+
+        for neighbor, cost in graph[current]:
+            tentative_g = gscore[current] + cost
+
+            if neighbor not in gscore or tentative_g < gscore[neighbor]:
+                gscore[neighbor] = tentative_g
+                fscore = tentative_g + heuristic[neighbor]
+                parent[neighbor] = current
+
+                heapq.heappush(open_list, (fscore, neighbor))
+
+    return None, float("inf")
+
+
+path, cost = astar(graph, start, goal, heuristic)
+
+print("Shortest Path:", path)
+print("Total Cost:", cost)
+
+
+##-----PRA NO - 4 ----------------------------------------------------------------------------------------------------------------------------------
+
+
+rules = [
+    (["fever", "cough", "body_ache"], "flu_like_illness"),
+    (["sneezing", "cough"], "common_cold"),
+    (["flu_like_illness"], "medical_consultation"),
+    (["common_cold"], "rest_and_hydration"),
+    (["fever", "body_ache"], "possible_viral_illness")
+]
+
+# Human-readable descriptions of propositions
+descriptions = {
+    "fever": "Fever",
+    "cough": "Cough",
+    "sneezing": "Sneezing",
+    "body_ache": "Body ache",
+    "flu_like_illness": "Flu-like illness",
+    "common_cold": "Common cold",
+    "medical_consultation": "Recommend medical consultation",
+    "rest_and_hydration": "Recommend rest and hydration",
+    "possible_viral_illness": "Possible viral illness"
+}
+
+
+# Forward Chaining: Data-driven reasoning
+def forward_chaining(initial_facts):
+    facts = set(initial_facts)
+    changed = True
+
+    print("\n--- Forward Chaining ---")
+    print("Initial facts:", sorted(facts))
+
+    while changed:
+        changed = False
+
+        for premises, conclusion in rules:
+            if all(p in facts for p in premises):
+                if conclusion not in facts:
+                    facts.add(conclusion)
+                    changed = True
+
+                    rule_text = " AND ".join(premises)
+                    print(
+                        f"Rule fired: {rule_text} "
+                        f"-> {conclusion}"
+                    )
+
+    return facts
+
+
+# Backward Chaining: Goal-driven reasoning
+def backward_chaining(goal, facts, visited=None):
+    if visited is None:
+        visited = set()
+
+    # Goal is already established
+    if goal in facts:
+        return True
+
+    # Avoid repeatedly exploring the same goal
+    if goal in visited:
+        return False
+
+    visited = visited | {goal}
+
+    # Find a rule that can establish the goal
+    for premises, conclusion in rules:
+        if conclusion == goal:
+            # Every premise must be proved
+            if all(
+                backward_chaining(p, facts, visited.copy())
+                for p in premises
+            ):
+                return True
+
+    return False
+
+
+# Main program
+print("RULE-BASED EXPERT SYSTEM")
+print("Forward Chaining and Backward Chaining")
+print("\nEnter symptoms separated by commas.")
+print("Available symptoms: fever, cough, sneezing, body_ache")
+
+user_input = input("Enter observed symptoms: ").lower()
+
+initial_facts = {
+    item.strip()
+    for item in user_input.split(",")
+    if item.strip()
+}
+
+# Validate input symptoms
+valid_symptoms = {
+    "fever", "cough", "sneezing", "body_ache"
+}
+
+invalid = initial_facts - valid_symptoms
+
+if invalid:
+    print("Invalid symptoms:", ", ".join(sorted(invalid)))
+    print("Please run the program again with valid symptoms.")
+
+else:
+    # Execute Forward Chaining
+    inferred_facts = forward_chaining(initial_facts)
+
+    # Display inferred conclusions
+    print("\n--- Inferred Conclusions ---")
+
+    conclusions = inferred_facts - initial_facts
+
+    if conclusions:
+        for fact in sorted(conclusions):
+            print("-", descriptions.get(fact, fact))
+    else:
+        print("No additional conclusions could be inferred.")
+
+    # Available goals
+    goals = [
+        "flu_like_illness",
+        "common_cold",
+        "medical_consultation",
+        "rest_and_hydration",
+        "possible_viral_illness"
+    ]
+
+    print("\n--- Select a Goal ---")
+
+    for i, goal in enumerate(goals, start=1):
+        print(f"{i}. {descriptions[goal]}")
+
+    try:
+        choice = int(input("Select a goal (1-5): "))
+
+        if 1 <= choice <= len(goals):
+            goal = goals[choice - 1]
+
+            print("\n--- Backward Chaining ---")
+            print("Goal:", descriptions[goal])
+
+            result = backward_chaining(goal, initial_facts)
+
+            if result:
+                print(
+                    "Result: TRUE - The goal is supported "
+                    "by the facts and rules."
+                )
+            else:
+                print(
+                    "Result: FALSE - The goal could not "
+                    "be proved using the supplied facts and rules."
+                )
+        else:
+            print("Invalid choice. Please select a number from 1 to 5.")
+
+    except ValueError:
+        print("Invalid input. Please enter a number from 1 to 5.")
+          
+
+PRA no -5 -----------------------------------------------------------------------------------------------------------
+
+First, import the Pandas library.
+import pandas as pd
+The read_csv() function is used to read a CSV file.
+df = pd.read_csv("heart.csv")
+Display First Five Records
+print(df.head())
+Display Last Five Records
+print(df.tail())
+Check the Number of Rows and Columns
+print(df.shape)
+Display Column Names
+print(df.columns)
+Check Data Types
+print(df.dtypes)
+Get Information About the Dataset
+df.info()
+Reading CSV from a Specific Location
+If the CSV file is stored in another folder, specify its path.
+df = pd.read_csv("C:/Users/Student/Documents/heart.csv")
+
+
+PRA - 7------------------------------------------------------------------------------------------------------------------------------------------
+
+  import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
+
+df = pd.read_csv("Heart.csv")
+print("First 5 records:")
+print(df.head())
+print("\nDataset Shape:")
+print(df.shape)
+print("\nColumn Names:")
+print(df.columns)
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+
+df["Ca"] = df["Ca"].fillna( df["Ca"].mean() )
+df["Thal"] = df["Thal"].fillna(df["Thal"].mode()[0])
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+unused_column = ["Unnamed: 0","AHD","ChestPain","Thal"]
+X = df.drop(unused_column, axis=1)
+y = df["AHD"]
+print("\nFeatures:")
+print(X.columns)
+print("\nTarget Distribution:")
+print(y.value_counts())
+
+          
+X.isnull().sum()
+
+          
+X.dtypes
+
+          
+X_train, X_test, y_train, y_test = train_test_split(
+X,
+y,
+test_size=0.20,
+random_state=42,
+stratify=y
+)
+print("\nTraining Data:", X_train.shape)
+print("Testing Data:", X_test.shape)
+          
+
+y_train
+
+
+# 6. Feature Scaling
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+
+# Map target output value to integer value
+
+y_train= y_train.map({
+"Yes": 1,
+"No": 0
+})
+y_test= y_test.map({
+"Yes": 1,
+"No": 0
+})
+
+
+y_train
+
+
+y_train=y_train.astype(int)
+y_test=y_test.astype(int)
+
+
+# 7. create Logistic Regression
+logistic_model = LogisticRegression(max_iter=100)
+logistic_model.fit(X_train_scaled, y_train)
+  
+
+  # 7. create Logistic Regression
+y_pred_lr = logistic_model.predict(X_test_scaled)
+print(y_pred_lr)
+
+
+# Calculate prediction probabilities
+y_prob = logistic_model.predict_proba(X_test_scaled)
+print(y_prob)
+
+
+# 10. Evaluate the model
+# Accuracy= / (TP+TN) /(TP+TN+FP+FN)
+# Precision=TP / (TP + FP)
+# Recall=TP/ (TP + FN)
+# F1=2× (Precision×Recall) / (Precision+Recall)
+accuracy=accuracy_score(y_test,y_pred_lr)
+print("Accuracy of Logistic Model model",accuracy)
+precision = precision_score(y_test,y_pred_lr)
+print("Precision of Logistic Model model:", precision)
+recall = recall_score(y_test,y_pred_lr)
+print("Recall of Logistic Model model:", recall)
+f1 = f1_score(y_test,y_pred_lr)
+print("F1 Score of Logistic Model model::", f1)
+
+
+  # Confusion matrix
+cm = confusion_matrix(y_test,y_pred_lr)
+print("Confusion Matrix:")
+print(cm)
+
+
+from sklearn.metrics import ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+# Display confusion matrix
+ConfusionMatrixDisplay.from_predictions(
+y_test,
+y_pred_lr,
+display_labels=["Disease","No Disease"],
+)
+plt.title("Confusion Matrix - Logistic Regression")
+plt.show()
+
+          
+
+k = 5
+knnmodel = KNeighborsClassifier(n_neighbors=k)
+knnmodel.fit(X_train_scaled, y_train)
+y_pred_knn = knnmodel.predict(X_test_scaled)
+print(y_pred_knn)
+
+
+          
+# 10. Evaluate the model
+# Accuracy= (TP+TN+FP+FN) / (TP+TN)
+# Precision=TP / (TP + FP)
+# Recall=TP/ (TP + FN)
+# F1=2× (Precision×Recall) / (Precision+Recall)
+accuracy=accuracy_score(y_test,y_pred_knn)
+print("Accuracy of KNN model",accuracy)
+precision = precision_score(y_test,y_pred_knn)
+print("Precision of KNN model:", precision)
+recall = recall_score(y_test,y_pred_knn)
+print("Recall of KNN model:", recall)
+f1 = f1_score(y_test,y_pred_knn)
+print("F1 Score of KNN model::", f1)
+
+
+from sklearn.metrics import ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+# Display confusion matrix
+ConfusionMatrixDisplay.from_predictions(
+y_test,
+y_pred_knn,
+display_labels=["Disease","No Disease"],
+)
+plt.title("Confusion Matrix - Logistic Regression")
+plt.show()
+
+
+          
