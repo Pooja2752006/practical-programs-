@@ -1,6 +1,6 @@
-<p>
-##------PRA NO-1
 <pre><code>
+##------PRA NO-1
+
 class SmartHomeAgent:
     
     def __init__(self):
@@ -46,12 +46,12 @@ owner = input("Owner at Home? (yes/no): ") #//.lower() == "yes"
 agent.perceive(light, temp, motion, owner)
 agent.display()
 
-</code></pre>
+
 
 
 ##------PRA NO - 2 ---------------------------------------------------------------------------------------------------------------------------------------
-<pre><code>
-    <h1>
+
+    
 from collections import deque
 import time
 
@@ -102,12 +102,11 @@ if __name__ == "__main__":
         print(shortest_path)
     else:
         print("No solution exists for this maze.")
-    </h1>
-</code></pre>
+    
 
 
 ##------PRA NO- 3-------------------------------------------------------------------------------------------------------------------------------------------
-<pre><code>
+
 
 graph = {
 
@@ -174,10 +173,10 @@ path, cost = astar(graph, start, goal, heuristic)
 print("Shortest Path:", path)
 print("Total Cost:", cost)
 
-</code></pre>
+
 ##-----PRA NO - 4 ----------------------------------------------------------------------------------------------------------------------------------
 
-<pre><code>
+
 rules = [
     (["fever", "cough", "body_ache"], "flu_like_illness"),
     (["sneezing", "cough"], "common_cold"),
@@ -335,9 +334,8 @@ else:
     except ValueError:
         print("Invalid input. Please enter a number from 1 to 5.")
           
-</code></pre>
 PRA no -5 -----------------------------------------------------------------------------------------------------------
-<pre><code>
+
 First, import the Pandas library.
 import pandas as pd
 The read_csv() function is used to read a CSV file.
@@ -528,7 +526,6 @@ display_labels=["Disease","No Disease"],
 )
 plt.title("Confusion Matrix - Logistic Regression")
 plt.show()
-
 </code></pre>
-</p>
+
           
